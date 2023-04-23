@@ -1,6 +1,9 @@
+from pathlib import Path
+
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+from config import basedir
 
 
 class ScrapeService:
@@ -27,6 +30,7 @@ class ScrapeService:
             title = self.get_title(tag=title_tag[data])
             year = self.get_year(tag=title_tag[data])
             rating = self.get_rating(tag=rating_tag[data])
+
             movies_result.append(
                 {
                     'Poster': posters,
@@ -53,3 +57,5 @@ class ScrapeService:
 if __name__ == '__main__':
     service = ScrapeService()
     movies = service.get_top_movies()
+    df = pd.DataFrame(movies)
+    df.to_csv(Path(basedir) / 'top_movies.csv')
