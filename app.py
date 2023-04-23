@@ -1,7 +1,7 @@
 from service import ScrapeService
 from pathlib import Path
 import pandas as pd
-from config import basedir
+from app_config import basedir
 
 
 if __name__ == '__main__':
