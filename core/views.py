@@ -6,8 +6,8 @@ from service import ScrapeService
 
 # Create your views here.
 def index(request):
-    service = ScrapeService()
-    movies = service.get_top_movies()
+    movies_service = ScrapeService()
+    movies = movies_service.get_top_movies()
     for top_movie in movies:
         movie = (
             Movies.objects.filter(
