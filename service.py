@@ -59,8 +59,6 @@ class ScrapeService:
         tvshows_title_tag = soup.find_all('td', class_='titleColumn')
         tvshows_rating_tag = soup.find_all('td', class_='ratingColumn imdbRating')
 
-        assert len(tvshows_poster_tag) == len(tvshows_title_tag) == len(tvshows_rating_tag) == 100, f'Error!'
-
         tvshows_result = []
         for tvshow in range(len(tvshows_poster_tag)):
             tv_posters = self.get_poster(tag=tvshows_poster_tag[tvshow])
