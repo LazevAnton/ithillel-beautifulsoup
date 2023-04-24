@@ -10,6 +10,7 @@ class ScrapeService:
 
     }
     FILMS_URL = "https://www.imdb.com/chart/top"
+    TVSHOWS_URL = "https://www.imdb.com/chart/tvmeter"
 
     def get_top_movies(self):
         req = requests.get(self.FILMS_URL, self.headers)
@@ -47,4 +48,31 @@ class ScrapeService:
         return int(tag.find('span').text.lstrip('(').rstrip(')').strip())
 
     def get_rating(self, tag):
+        if tag.find('strong') is None:
+            return 0
         return float(tag.find('strong').text.strip())
+
+    def get_top_tvshows(self):
+        req = requests.get(self.TVSHOWS_URL, self.headers)
+        soup = BeautifulSoup(req.content, 'lxml')
+        tvshows_poster_tag = soup.find_all('td', class_='posterColumn')
+        tvshows_title_tag = soup.find_all('td', class_='titleColumn')
+        tvshows_rating_tag = soup.find_all('td', class_='ratingColumn imdbRating')
+
+        assert len(tvshows_poster_tag) == len(tvshows_title_tag) == len(tvshows_rating_tag) == 100, f'Error! Something' \
+                                                                                                    f' went wrong'
+        tvshows_result = []
+        for tvshow in range(len(tvshows_poster_tag)):
+            tv_posters = self.get_poster(tag=tvshows_poster_tag[tvshow])
+            tv_title = self.get_title(tag=tvshows_title_tag[tvshow])
+            tv_year = self.get_year(tag=tvshows_title_tag[tvshow])
+            tv_rating = self.get_rating(tag=tvshows_rating_tag[tvshow])
+            tvshows_result.append(
+                {
+                    'Posters': tv_posters,
+                    'Title': tv_title,
+                    'Year': tv_year,
+                    'Rating': tv_rating
+                }
+            )
+        return tvshows_result
