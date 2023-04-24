@@ -15,4 +15,4 @@ def top_tvshows(request):
     context = {
         'tvshows': tvshows
     }
-    return render(request, template_name='core/tvshows.html', context=context)
+    return render(request, 'core/tvshows.html', context=context)
